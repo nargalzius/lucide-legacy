@@ -127,6 +127,35 @@ export default {
 
 Every icon (including aliases such as `AlarmCheck` for `AlarmClockCheck`) is a named export. Standard Lucide props are supported: `color`, `size`, `strokeWidth`, `absoluteStrokeWidth`, and `defaultClass`.
 
+## Preserved removed icons
+
+Current upstream Lucide (1.48.0) has **removed** a set of icons that the deprecated `lucide-vue@0.517.0` shipped — almost all brand / social-media logos, which Lucide deprecated for trademark reasons. Deleting them from a consumer's dependency would break `import { Github } from 'lucide-vue'` in existing projects, so this fork **keeps them** and marks each `src/icons/` file with a `/* deprecated upstream */` header (they are tracked in `scripts/seed-icons.json` and reported as "removed (kept)" in every sync delta).
+
+The 18 preserved icons (import name → kebab file):
+
+| Icon (named export) | Kebab file |
+| --- | --- |
+| `Chrome` | `chrome` |
+| `Codepen` | `codepen` |
+| `Codesandbox` | `codesandbox` |
+| `Dribbble` | `dribbble` |
+| `Facebook` | `facebook` |
+| `Figma` | `figma` |
+| `Framer` | `framer` |
+| `Github` | `github` |
+| `Gitlab` | `gitlab` |
+| `Instagram` | `instagram` |
+| `Linkedin` | `linkedin` |
+| `Pocket` | `pocket` |
+| `RailSymbol` | `rail-symbol` |
+| `Slack` | `slack` |
+| `Trello` | `trello` |
+| `Twitch` | `twitch` |
+| `Twitter` | `twitter` |
+| `Youtube` | `youtube` |
+
+So `import { Github, Twitter, Dribbble } from 'lucide-vue'` still works even though those icons no longer exist in current upstream Lucide. If upstream ever **re-adds** one of these, a sync prefers the live upstream version and drops it from the seed store automatically. (Icons that upstream merely **renamed** — e.g. `AlertTriangle` → `TriangleAlert` — are not in this list; both names stay exported as aliases, so old imports keep working too.)
+
 ## Keep up to date
 
 ```sh
