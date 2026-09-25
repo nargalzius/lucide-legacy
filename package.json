@@ -1,0 +1,35 @@
+{
+  "name": "lucide-vue",
+  "version": "1.48.0-legacy.1",
+  "description": "Maintained legacy fork of the deprecated lucide-vue npm package: keeps Vue 2 Lucide icon components working, with icon data auto-synced from current Lucide releases.",
+  "license": "ISC",
+  "main": "dist/cjs/lucide-vue.js",
+  "module": "dist/esm/lucide-vue.js",
+  "unpkg": "dist/umd/lucide-vue.min.js",
+  "types": "dist/types/lucide-vue.d.ts",
+  "sideEffects": false,
+  "devDependencies": {
+    "vue": "2.7.14",
+    "vue-server-renderer": "2.7.14"
+  },
+  "files": [
+    "dist",
+    "nuxt.js"
+  ],
+  "peerDependencies": {
+    "vue": "^2.6.12"
+  },
+  "scripts": {
+    "sync": "node scripts/sync.mjs && node scripts/build.mjs",
+    "prepare": "node scripts/sync.mjs --offline-ok && node scripts/build.mjs",
+    "test": "node --test tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nargalzius/lucide-legacy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nargalzius/lucide-legacy/issues"
+  },
+  "homepage": "https://lucide.dev"
+}

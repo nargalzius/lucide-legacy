@@ -1,0 +1,22 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const FileExclamationPoint = createLucideIcon("FileExclamationPointIcon", [
+  ["path", {
+    d: "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+  }],
+  ["path", {
+    d: "M12 9v4"
+  }],
+  ["path", {
+    d: "M12 17h.01"
+  }]
+]);
+
+export { FileExclamationPoint as default };

@@ -1,0 +1,22 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const BedSingle = createLucideIcon("BedSingleIcon", [
+  ["path", {
+    d: "M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"
+  }],
+  ["path", {
+    d: "M5 10V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"
+  }],
+  ["path", {
+    d: "M3 18h18"
+  }]
+]);
+
+export { BedSingle as default };

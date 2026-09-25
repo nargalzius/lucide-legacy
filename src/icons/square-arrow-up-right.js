@@ -1,0 +1,26 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const ArrowUpRightSquare = createLucideIcon("ArrowUpRightSquareIcon", [
+  ["path", {
+    d: "M15 15V9H9"
+  }],
+  ["path", {
+    d: "m9 15 6-6"
+  }],
+  ["rect", {
+    x: "3",
+    y: "3",
+    width: "18",
+    height: "18",
+    rx: "2"
+  }]
+]);
+
+export { ArrowUpRightSquare as default };

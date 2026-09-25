@@ -1,0 +1,26 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const PlayingCards = createLucideIcon("PlayingCardsIcon", [
+  ["path", {
+    d: "M14.832 8.445a1 1 0 00-1.589-.098l-2.075 3.098a1 1 0 000 1.11l2 3a1 1 0 001.664 0l2-3a1 1 0 000-1.11z"
+  }],
+  ["path", {
+    d: "m7.18 20.827-5-11a2 2 0 01.993-2.647L7 5.44"
+  }],
+  ["rect", {
+    x: "7",
+    y: "2",
+    width: "14",
+    height: "20",
+    rx: "2"
+  }]
+]);
+
+export { PlayingCards as default };

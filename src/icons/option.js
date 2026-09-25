@@ -1,0 +1,19 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const Option = createLucideIcon("OptionIcon", [
+  ["path", {
+    d: "M14 3h7"
+  }],
+  ["path", {
+    d: "M3 3h5.28a1 1 0 0 1 .948.684l5.544 16.632a1 1 0 0 0 .949.684H21"
+  }]
+]);
+
+export { Option as default };

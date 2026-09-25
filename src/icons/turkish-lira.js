@@ -1,0 +1,22 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const TurkishLira = createLucideIcon("TurkishLiraIcon", [
+  ["path", {
+    d: "M15 4 5 9"
+  }],
+  ["path", {
+    d: "m15 8.5-10 5"
+  }],
+  ["path", {
+    d: "M18 12a9 9 0 0 1-9 9V3"
+  }]
+]);
+
+export { TurkishLira as default };

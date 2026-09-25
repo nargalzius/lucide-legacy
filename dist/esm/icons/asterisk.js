@@ -1,0 +1,22 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const Asterisk = createLucideIcon("AsteriskIcon", [
+  ["path", {
+    d: "M12 5v14"
+  }],
+  ["path", {
+    d: "m18.065 8.496-12.125 7"
+  }],
+  ["path", {
+    d: "m5.94 8.504 12.125 7"
+  }]
+]);
+
+export { Asterisk as default };

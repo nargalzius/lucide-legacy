@@ -1,0 +1,33 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const Angry = createLucideIcon("AngryIcon", [
+  ["path", {
+    d: "M15 12v-1.584"
+  }],
+  ["path", {
+    d: "M17 10a5 5 0 00-3 1"
+  }],
+  ["path", {
+    d: "M7 10a5 5 0 013 1"
+  }],
+  ["path", {
+    d: "M9 12v-1.584"
+  }],
+  ["path", {
+    d: "M9 17a5 5 0 016.001 0"
+  }],
+  ["circle", {
+    cx: "12",
+    cy: "12",
+    r: "10"
+  }]
+]);
+
+export { Angry as default };

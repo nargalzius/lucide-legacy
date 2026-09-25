@@ -1,0 +1,23 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const UsbCPort = createLucideIcon("UsbCPortIcon", [
+  ["path", {
+    d: "M6 12h12"
+  }],
+  ["rect", {
+    x: "2",
+    y: "8",
+    width: "20",
+    height: "8",
+    rx: "4"
+  }]
+]);
+
+export { UsbCPort as default };

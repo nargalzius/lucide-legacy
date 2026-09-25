@@ -1,0 +1,34 @@
+/**
+ * @license lucide-vue v1.48.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+import createLucideIcon from '../createLucideIcon.js';
+
+const UtilityPole = createLucideIcon("UtilityPoleIcon", [
+  ["path", {
+    d: "M12 2v20"
+  }],
+  ["path", {
+    d: "M2 5h20"
+  }],
+  ["path", {
+    d: "M3 3v2"
+  }],
+  ["path", {
+    d: "M7 3v2"
+  }],
+  ["path", {
+    d: "M17 3v2"
+  }],
+  ["path", {
+    d: "M21 3v2"
+  }],
+  ["path", {
+    d: "m19 5-7 7-7-7"
+  }]
+]);
+
+export { UtilityPole as default };
