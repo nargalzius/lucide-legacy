@@ -32,6 +32,8 @@ import {
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+const NODE_MAJOR = Number(process.versions.node.split('.')[0]);
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CACHE_DIR = join(ROOT, 'node_modules', '.cache', 'lucide-legacy');
 const SRC_ICONS_DIR = join(ROOT, 'src', 'icons');
@@ -678,6 +680,9 @@ async function ensureSources(version, args) {
     if (args.offline) process.exit(1); // strict
     process.exit(0);                   // --offline-ok: silent no-op
   }
+  if (NODE_MAJOR < 18) {
+    fail(`downloading lucide-${version} requires Node >= 18 (global fetch); running Node ${process.versions.node}. Run this sync on Node >= 18, or use --offline-ok (committed src/+dist/ are already present, so a plain install works without re-downloading).`);
+  }
   const [staticPkg, lucidePkg] = await Promise.all([
     fetchJson(`${REGISTRY}/lucide-static`),
     fetchJson(`${REGISTRY}/lucide`),
@@ -907,8 +912,36 @@ async function main() {
   }
 
   // 1. Resolve version
+  //
+  // In offline mode (--offline / --offline-ok) we must NOT hit the network —
+  // and we must NOT use global `fetch` (only defined on Node >= 18). So offline
+  // mode resolves the version purely from local state (a --version arg, else the
+  // committed sync-meta.json), then lets ensureSources() do the cache check. If
+  // the cache is incomplete, ensureSources() exits (0 for --offline-ok) before
+  // any network call. This is what makes the `prepare` hook safe to run on a
+  // fresh clone / consumer Node (< 18, no network) — it no-ops instead of
+  // crashing with "fetch is not defined".
   let version = args.version;
+  const offline = args.offline || args.offlineOk;
+
+  if (!version && offline) {
+    try {
+      const meta = JSON.parse(readFileSync(SYNC_META_FILE, 'utf8'));
+      version = meta.lucideVersion;
+    } catch { /* no committed sync-meta.json — stay versionless and let ensureSources no-op */ }
+    if (version) {
+      console.log(`[offline] resolving version from sync-meta.json: ${version}`);
+    } else {
+      console.log('[offline] no --version given and no sync-meta.json; no-op.');
+      process.exit(args.offline ? 1 : 0);
+    }
+  }
+
   if (!version) {
+    // Online path: query the registry for `latest`. Requires Node >= 18 (fetch).
+    if (NODE_MAJOR < 18) {
+      fail(`resolving 'latest' online requires Node >= 18 (global fetch); running Node ${process.versions.node}. Use --version X.Y.Z (with cache) or --offline-ok.`);
+    }
     const [staticPkg, lucidePkg] = await Promise.all([
       fetchJson(`${REGISTRY}/lucide-static`),
       fetchJson(`${REGISTRY}/lucide`),
