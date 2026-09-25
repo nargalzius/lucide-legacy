@@ -30,6 +30,24 @@ npm warn install-scripts   lucide-vue@1.48.0-legacy.1 (prepare: node scripts/syn
 
 > The `prepare` warning is expected and harmless — `dist/` is already committed (see [Troubleshooting](#troubleshooting)). Use exactly the `git+ssh://git@github.com/nargalzius/lucide-legacy.git` form above for SSH (the SCP-style "user@host:repo" shorthand is **not** a valid npm git spec).
 
+**For existing projects — swap the dependency value (cleanest migration).** If your project already uses the deprecated `lucide-vue`, you don't need to change any import or component — just repoint the dependency. In your `package.json`, change the `lucide-vue` value to the fork and run `npm install`:
+
+```json
+"dependencies": {
+  ...
+  "lucide-vue": "github:nargalzius/lucide-legacy#main",
+  ...
+}
+```
+
+```sh
+npm install
+```
+
+This works with **no code changes** because the fork keeps the exact package name (`lucide-vue`), the exact API, and every icon + alias the deprecated package shipped (see [Preserved removed icons](#preserved-removed-icons)). Existing `import { Activity } from 'lucide-vue'` calls keep resolving — now to the maintained fork. Verified: a project on the registry `lucide-vue@0.517.0` switched to this value resolves to `lucide-vue@1.48.0-legacy.1` and `require('lucide-vue')` works (2133 exports, `Github` present). A fresh clone of any project whose `package.json` already has this value installs the fork the same way.
+
+> `github:owner/repo#ref` is npm's short form of the git URL above (it installs `main` by default; pin a tag like `#v1.48.0-legacy.1` if you want a fixed revision). It is functionally identical to `npm install git+https://github.com/nargalzius/lucide-legacy.git` — both clone the repo, run its `prepare`, and install the committed `dist/`.
+
 **npm from a packed tarball** — pack in a checkout of this repo, then install the tarball from your consuming project.
 
 ```sh
