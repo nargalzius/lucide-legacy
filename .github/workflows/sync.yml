@@ -1,0 +1,62 @@
+name: Sync icons from upstream lucide
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * 1' # Mondays at 04:00 UTC
+
+jobs:
+  sync:
+    name: Regenerate icons and open sync PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The sync + build scripts are zero-npm-dependency (builtins + system
+      # tar), so `npm install` is intentionally omitted here.
+      - name: Run sync and build, capture the delta report
+        run: |
+          # Capture the sync delta report (stdout) for the PR body.
+          node scripts/sync.mjs 2>&1 | tee sync-delta.txt
+          # Rebuild the generated dist from the regenerated sources.
+          node scripts/build.mjs
+
+      - name: Derive upstream lucide version for the branch name
+        run: |
+          VERSION="$(node -e "console.log(require('./sync-meta.json').lucideVersion)")"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+
+      # create-pull-request opens a PR only when there is a diff. If the
+      # icons are already in sync it detects no changes and does nothing.
+      - name: Open the sync PR if there are changes
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: chore/sync-lucide-${{ env.VERSION }}
+          commit-message: 'chore: sync icons to lucide ${{ env.VERSION }}'
+          add-paths: |
+            src/
+            dist/
+            sync-meta.json
+            package.json
+          title: 'chore: sync icons to lucide ${{ env.VERSION }}'
+          body: |
+            ## Upstream lucide sync
+
+            Regenerated the Vue icon wrappers from upstream lucide
+            **v${{ env.VERSION }}** and rebuilt the dist. If the icons are
+            already in sync, no changes appear in this PR.
+
+            <details>
+            <summary>Delta report (sync stdout)</summary>
+
+            ```
+            ${{ readFile('sync-delta.txt') }}
+            ```
+
+            </details>
