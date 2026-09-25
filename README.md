@@ -8,17 +8,29 @@ The original `lucide-vue` package (`0.517.0`, the Vue 2 build of Lucide) is depr
 
 ## Install
 
-> Status of each option: **verified: pending** — each one will be exercised and confirmed in a later task; the commands below are the intended form.
+The package is **not** published to the npm registry under the name `lucide-vue` (see [Troubleshooting](#troubleshooting)), so it is installed from git, a packed tarball, or a local checkout. Every runnable command below was actually executed and confirmed to install `lucide-vue@1.48.0-legacy.1` (exit 0). The two package-manager override sections are config examples only.
 
-**npm from git URL** *(verified: pending)*
+**npm from git URL** — HTTPS works anonymously (the repo is public); the SSH form uses your git auth.
 
 ```sh
+# anonymous, no auth needed:
 npm install git+https://github.com/nargalzius/lucide-legacy.git
-# or the SSH form:
+# or the SSH form (uses your git SSH auth):
 npm install git+ssh://git@github.com/nargalzius/lucide-legacy.git
 ```
 
-**npm from a packed tarball** *(verified: pending)*
+Verified output (fresh consumer dir, npm 11):
+
+```
+added 14 packages, and audited 15 packages in 10s
+…
+npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn install-scripts   lucide-vue@1.48.0-legacy.1 (prepare: node scripts/sync.mjs --offline-ok && node scripts/build.mjs)
+```
+
+> The `prepare` warning is expected and harmless — `dist/` is already committed (see [Troubleshooting](#troubleshooting)). Use exactly the `git+ssh://git@github.com/nargalzius/lucide-legacy.git` form above for SSH (the SCP-style "user@host:repo" shorthand is **not** a valid npm git spec).
+
+**npm from a packed tarball** — pack in a checkout of this repo, then install the tarball from your consuming project.
 
 ```sh
 # in a checkout of this repo:
@@ -27,7 +39,23 @@ npm pack
 npm install ./lucide-vue-1.48.0-legacy.1.tgz
 ```
 
-**pnpm overrides** — pin the name to the git URL so transitive/legacy deps resolve to this fork *(verified: pending)*. In `pnpm-workspace.yaml`:
+Verified `npm pack` output (tail):
+
+```
+npm notice filename: lucide-vue-1.48.0-legacy.1.tgz
+npm notice package size: 577.5 kB
+npm notice unpacked size: 3.6 MB
+npm notice total files: 1885
+lucide-vue-1.48.0-legacy.1.tgz
+```
+
+Verified `npm install ./lucide-vue-1.48.0-legacy.1.tgz` output (fresh consumer dir):
+
+```
+added 14 packages, and audited 15 packages in 3s
+```
+
+**pnpm overrides** — *config example (not a run command)*. Pin the name to the git URL so transitive/legacy deps resolve to this fork. In `pnpm-workspace.yaml`:
 
 ```yaml
 overrides:
@@ -46,7 +74,7 @@ or in the consuming package.json (`pnpm` key):
 }
 ```
 
-**yarn resolutions** — same idea for Yarn *(verified: pending)*:
+**yarn resolutions** — *config example (not a run command)*. Same idea for Yarn, in the consuming package.json:
 
 ```json
 {
@@ -56,11 +84,20 @@ or in the consuming package.json (`pnpm` key):
 }
 ```
 
-**`file:` protocol** — install from a local checkout path *(verified: pending)*:
+**`file:` protocol** — install from a local checkout path.
 
 ```sh
-npm install file:./path-to-lucide-legacy
+npm install file:/path/to/lucide-legacy
 ```
+
+Verified output (fresh consumer dir, npm 11):
+
+```
+added 1 package, and audited 3 packages in 1s
+found 0 vulnerabilities
+```
+
+(After any of these, `require('lucide-vue')` exposes 2133 top-level keys — 2132 named exports plus the `icons` namespace of 1872 — and `Activity` is a component object.)
 
 ## Usage
 
@@ -96,10 +133,27 @@ Every icon (including aliases such as `AlarmCheck` for `AlarmClockCheck`) is a n
 npm run sync
 ```
 
-`sync` pulls the latest `lucide-static` / `lucide` data, regenerates `src/icons` and the `dist/` bundles, prints an added / removed / unchanged delta report, and is meant to be committed (the sync script re-commits the regenerated data when run in a git checkout).
+`sync` pulls the latest `lucide-static` / `lucide` data, regenerates `src/icons` and the `dist/` bundles, prints an added / removed / unchanged delta report, and re-commits the regenerated data when run in a git checkout. Verified `--dry-run` output (no-op write, safe to run):
+
+```
+sync delta (lucide v1.48.0) vs src/icons/:
+  added:     0
+  removed:   0 (kept on disk with '/* deprecated upstream */' header)
+  unchanged: 1872
+  changed:   0 (data updated in place)
+  total to emit: 1872 files (1854 live + 18 seeded)
+```
 
 - Pin a specific upstream version: `npm run sync -- --version X.Y.Z`
 - Preview without writing files: `npm run sync -- --dry-run`
+- Re-check parity against `lucide-vue@0.517.0` (engine + exports): `node scripts/verify-parity.mjs`
+
+## Troubleshooting
+
+- **Vue 2 only.** The peer dependency is `vue ^2.6.12`. This fork targets Vue 2 — on Vue 3, use the official [`lucide`](https://lucide.dev) package directly instead of this fork. (Server-rendering note: with Vue 2 you use `vue-server-renderer`'s `createRenderer().renderToString(vm, cb)`; there is no top-level `renderToString` export in Vue 2, and the Vue 3 SSR API is different.)
+- **Not on the npm registry as `lucide-vue`.** This package is NOT published to the npm registry under the name `lucide-vue` — that name is still live (and deprecated) on the registry. Install this fork **only** via the git URL, package-manager overrides, or the `file:` protocol shown above.
+- **Fresh offline clone.** The `prepare` script runs on install; on a fresh clone with no cache and no network it no-ops — it prints `[offline] cache miss for lucide version …; leaving committed src/ and dist/ unchanged.` and exits 0, keeping the committed `src/` and `dist/`. If you see a deprecation warning from an **older** `lucide-vue`, you have the deprecated registry package, not this fork.
+- **npm install-script gating.** If your npm version gates dependency lifecycle scripts and skips this package's `prepare` (you'll see an `install-scripts … not yet covered by allowScripts` warning), it is harmless because `dist/` is already committed and shipped — `require('lucide-vue')` works either way. To force regeneration-on-install, run `npm install-scripts approve lucide-vue`.
 
 ## Deprecation safety / scope note
 
